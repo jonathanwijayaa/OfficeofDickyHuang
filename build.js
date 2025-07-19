@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const srcDir = path.join(__dirname, 'src');
-const publicDir = path.join(__dirname, 'public');
+const publicDir = path.join(__dirname, 'docs');
 const htmlPartialsDir = path.join(srcDir, 'html');
 
 // Pastikan folder public dan subfolder-nya ada

@@ -23,9 +23,9 @@
   },
   "scripts": {
     "build:html": "node build.js",
-    "build:tailwind": "npx tailwindcss -i ./src/css/style.css -o ./public/css/output.css",
-    "watch:tailwind": "npx tailwindcss -i ./src/css/style.css -o ./public/css/output.css --watch",
-    "start": "npm run build:html && npm run watch:tailwind", 
+    "build:tailwind": "npx tailwindcss -i ./src/css/style.css -o ./docs/css/output.css", 
+    "watch:tailwind": "npx tailwindcss -i ./src/css/style.css -o ./docs/css/output.css --watch", 
+    "start": "npm run build:html && npm run watch:tailwind",
     "build": "npm run build:html && npm run build:tailwind -- --minify",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
