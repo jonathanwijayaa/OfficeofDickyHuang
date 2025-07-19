@@ -1,0 +1,27 @@
+<main class="flex-grow w-full pt-24 overflow-hidden">
+        <section id="projects" class="full-screen-section bg-neutral-100">
+            <div class="w-full max-w-6xl mx-auto flex flex-col items-center h-full">
+                <h2 class="text-5xl md:text-6xl font-semibold text-neutral-800 font-playfair mb-8 text-center">
+                    Our Portfolio of Work
+                </h2>
+
+                <div class="filter-buttons">
+                    <button class="filter-btn" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="residential">Residential</button>
+                    <button class="filter-btn" data-filter="interior">Interior Design</button>
+                    <button class="filter-btn" data-filter="public">Public Building</button>
+                </div>
+
+                <div class="project-content-wrapper">
+                    <div class="carousel-container">
+                        <div class="carousel-inner" id="carouselInner">
+                            </div>
+                    </div>
+
+                    <button class="carousel-button left" onclick="window.moveSlide(-1)" aria-label="Previous slide">❮</button>
+                    <button class="carousel-button right" onclick="window.moveSlide(1)" aria-label="Next slide">❯</button>
+                </div>
+                <div class="carousel-indicators" id="carouselIndicators"></div>
+            </div>
+        </section>
+    </main>
