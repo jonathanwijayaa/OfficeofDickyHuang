@@ -111,7 +111,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const projectsPerSlide = 8;
 
         const filterButtons = document.querySelectorAll('.filter-btn');
+        function updateCarousel() {
+            const currentCarouselItems = carouselInner.querySelectorAll('.carousel-item');
+            if (currentCarouselItems.length === 0) {
+                carouselInner.style.transform = `translateX(0)`; // Reset jika tidak ada item
+                carouselIndicators.innerHTML = ''; // Kosongkan indikator
+                // Sembunyikan tombol navigasi jika tidak ada item
+                const leftButton = document.querySelector('.carousel-button.left');
+                const rightButton = document.querySelector('.carousel-button.right');
+                if (leftButton) leftButton.style.display = 'none';
+                if (rightButton) rightButton.style.display = 'none';
+                return;
+            } else {
+                // Pastikan tombol navigasi terlihat jika ada item
+                const leftButton = document.querySelector('.carousel-button.left');
+                const rightButton = document.querySelector('.carousel-button.right');
+                if (leftButton) leftButton.style.display = 'flex'; // Atau 'block'
+                if (rightButton) rightButton.style.display = 'flex'; // Atau 'block'
+            }
 
+            const itemWidth = currentCarouselItems[0].offsetWidth; // Dapatkan lebar item pertama
+            carouselInner.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
+
+            const indicatorDots = carouselIndicators.querySelectorAll('.indicator-dot');
+            indicatorDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
         function renderCarousel(projectsToDisplay) {
             if (!carouselInner || !carouselIndicators) return;
 

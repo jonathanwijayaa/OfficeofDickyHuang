@@ -112,32 +112,115 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const filterButtons = document.querySelectorAll('.filter-btn');
 
+        // --- DEFINISI FUNGSI-FUNGSI CAROUSEL/FILTER UTAMA (DIURUTKAN AGAR TIDAK ADA MASALAH HOISTING) ---
+
+        // Fungsi untuk memperbarui tampilan carousel (transformasi dan indikator)
+        // Ini harus didefinisikan pertama karena dipanggil oleh fungsi lain.
+        function updateCarousel() {
+            const currentCarouselItems = carouselInner.querySelectorAll('.carousel-item');
+            if (currentCarouselItems.length === 0) {
+                carouselInner.style.transform = `translateX(0)`; // Reset jika tidak ada item
+                carouselIndicators.innerHTML = ''; // Kosongkan indikator
+                // Sembunyikan tombol navigasi jika tidak ada item
+                const leftButton = document.querySelector('.carousel-button.left');
+                const rightButton = document.querySelector('.carousel-button.right');
+                if (leftButton) leftButton.style.display = 'none';
+                if (rightButton) rightButton.style.display = 'none';
+                return;
+            } else {
+                // Pastikan tombol navigasi terlihat jika ada item
+                const leftButton = document.querySelector('.carousel-button.left');
+                const rightButton = document.querySelector('.carousel-button.right');
+                if (leftButton) leftButton.style.display = 'flex'; // Menggunakan flex karena CSS Anda memakai display:flex untuk tombol
+                if (rightButton) rightButton.style.display = 'flex'; // Menggunakan flex
+            }
+
+            const itemWidth = currentCarouselItems[0].offsetWidth; // Dapatkan lebar item pertama
+            carouselInner.style.transform = `translateX(${-currentIndex * itemWidth}px)`;
+
+            const indicatorDots = carouselIndicators.querySelectorAll('.indicator-dot');
+            indicatorDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        // Fungsi untuk menggerakkan slide (memanggil updateCarousel)
+        function moveSlide(direction) {
+            const currentCarouselItems = carouselInner.querySelectorAll('.carousel-item');
+            if (currentCarouselItems.length === 0) return; // Tidak melakukan apa-apa jika tidak ada item
+
+            currentIndex += direction;
+            if (currentIndex < 0) {
+                currentIndex = currentCarouselItems.length - 1;
+            } else if (currentIndex >= currentCarouselItems.length) {
+                currentIndex = 0;
+            }
+            updateCarousel();
+        }
+
+        // Fungsi untuk langsung menuju slide tertentu (memanggil updateCarousel)
+        function goToSlide(index) {
+            const currentCarouselItems = carouselInner.querySelectorAll('.carousel-item');
+            if (currentCarouselItems.length === 0) return; // Tidak melakukan apa-apa jika tidak ada item
+
+            currentIndex = index;
+            updateCarousel();
+        }
+
+        // Fungsi untuk membuat indikator slide (memanggil goToSlide)
+        function createIndicators(totalSlides) {
+            carouselIndicators.innerHTML = '';
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('span');
+                dot.classList.add('indicator-dot');
+                if (i === currentIndex) {
+                    dot.classList.add('active');
+                }
+                dot.addEventListener('click', () => goToSlide(i));
+                carouselIndicators.appendChild(dot);
+            }
+        }
+
+        // Fungsi untuk merender atau merender ulang carousel dengan proyek yang difilter
+        // Ini memanggil createIndicators dan updateCarousel.
         function renderCarousel(projectsToDisplay) {
             if (!carouselInner || !carouselIndicators) return;
 
             carouselInner.innerHTML = '';
             carouselIndicators.innerHTML = '';
-            currentIndex = 0;
+            currentIndex = 0; // Reset index saat dirender ulang
 
             const totalProjects = projectsToDisplay.length;
             const totalSlides = Math.ceil(totalProjects / projectsPerSlide);
 
             if (totalProjects === 0) {
                 carouselInner.innerHTML = '<p class="text-neutral-600 text-lg w-full text-center">No projects found for this category.</p>';
+                // Sembunyikan tombol navigasi jika tidak ada proyek
+                const leftButton = document.querySelector('.carousel-button.left');
+                const rightButton = document.querySelector('.carousel-button.right');
+                if (leftButton) leftButton.style.display = 'none';
+                if (rightButton) rightButton.style.display = 'none';
                 return;
+            } else {
+                // Pastikan tombol navigasi terlihat jika ada proyek
+                const leftButton = document.querySelector('.carousel-button.left');
+                const rightButton = document.querySelector('.carousel-button.right');
+                if (leftButton) leftButton.style.display = 'flex';
+                if (rightButton) rightButton.style.display = 'flex';
             }
 
             for (let i = 0; i < totalSlides; i++) {
                 const slideProjects = projectsToDisplay.slice(i * projectsPerSlide, (i + 1) * projectsPerSlide);
                 const carouselItem = document.createElement('div');
+                // Tambahkan kelas grid dan responsif yang Anda inginkan
                 carouselItem.classList.add('carousel-item', 'p-4', 'grid', 'grid-cols-1', 'sm:grid-cols-2', 'lg:grid-cols-4', 'gap-8');
 
                 slideProjects.forEach(project => {
                     const projectCard = document.createElement('div');
-                    projectCard.classList.add('project-card'); // 'active-filter' not needed here as rendering only active ones
+                    projectCard.classList.add('project-card');
 
                     projectCard.innerHTML = `
-                        <img src="${project.image}" alt="${project.name}">
+                        <img src="${project.image}" alt="${project.name}" class="w-full h-auto object-cover rounded-t-lg">
                         <div class="project-card-content">
                             <h3 class="text-xl font-semibold text-neutral-800 mb-2">${project.name}</h3>
                             <p class="text-neutral-600 text-sm mb-1">Location: ${project.location}</p>
@@ -153,39 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCarousel();
         }
 
-        function moveSlide(direction) {
-            const currentCarouselItems = carouselInner.querySelectorAll('.carousel-item');
-            currentIndex += direction;
-            if (currentIndex < 0) {
-                currentIndex = currentCarouselItems.length - 1;
-            } else if (currentIndex >= currentCarouselItems.length) {
-                currentIndex = 0;
-            }
-            updateCarousel();
-        }
-
-        function goToSlide(index) {
-            currentIndex = index;
-            updateCarousel();
-        }
-
-        function createIndicators(totalSlides) {
-            carouselIndicators.innerHTML = '';
-            for (let i = 0; i < totalSlides; i++) {
-                const dot = document.createElement('span');
-                dot.classList.add('indicator-dot');
-                if (i === currentIndex) {
-                    dot.classList.add('active');
-                }
-                dot.addEventListener('click', () => goToSlide(i));
-                carouselIndicators.appendChild(dot);
-            }
-        }
-
-        // Make functions globally accessible for inline HTML calls (if any)
-        window.moveSlide = moveSlide;
-        window.goToSlide = goToSlide;
-
+        // Fungsi untuk menerapkan filter (memanggil renderCarousel)
         function applyFilter(filter) {
             const filteredProjects = allProjectsData.filter(project =>
                 filter === 'all' || project.categories.includes(filter)
@@ -193,29 +244,35 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCarousel(filteredProjects);
         }
 
+        // --- GLOBAL ACCESSIBILITY UNTUK FUNGSI CAROUSEL (jika dipanggil dari HTML inline) ---
+        // Ini memastikan window.moveSlide dan window.goToSlide tersedia secara global
+        window.moveSlide = moveSlide;
+        window.goToSlide = goToSlide;
+
+        // --- INITIALIZATION ---
+        // Tambahkan event listener untuk tombol filter
         filterButtons.forEach(button => {
             button.addEventListener('click', () => {
                 filterButtons.forEach(btn => {
-                    btn.classList.remove('active-filter-btn'); // Use custom active class
+                    btn.classList.remove('active-filter-btn');
                 });
-                button.classList.add('active-filter-btn'); // Use custom active class
+                button.classList.add('active-filter-btn');
 
                 const filter = button.dataset.filter;
                 applyFilter(filter);
             });
         });
 
-        // Apply 'all' filter initially when projects.html is loaded
+        // Terapkan filter 'all' secara default saat halaman dimuat
         if (filterButtons.length > 0) {
-            // Check if 'all' button exists before simulating click
             const allButton = document.querySelector('.filter-btn[data-filter="all"]');
             if (allButton) {
-                allButton.click();
-            } else { // Fallback if 'all' button is missing for some reason
-                renderCarousel(allProjectsData);
+                allButton.click(); // Simulasikan klik pada tombol 'All'
+            } else {
+                renderCarousel(allProjectsData); // Fallback jika tombol 'All' tidak ada
             }
-        } else { // If no filter buttons, just render all projects
-            renderCarousel(allProjectsData);
+        } else {
+            renderCarousel(allProjectsData); // Jika tidak ada tombol filter sama sekali
         }
     }
 });
