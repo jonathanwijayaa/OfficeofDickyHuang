@@ -86,23 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (projectsSection) { // Only execute if on the projects page
         const allProjectsData = [
             // Residential Projects
-            { name: "MA Residence", location: "Jl Bendungan Hilir, Jakarta Barat", status: "Completed, 2020-2022", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=MA+Residence" },
-            { name: "NS Villa", location: "Lot Tunduh Bali", status: "Completed, 2022-2024", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=NS+Villa" },
-            { name: "JY Residence", location: "Jakarta", status: "2024-ongoing", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=JY+Residence" },
-            { name: "AY Residence", location: "Yogyakarta", status: "2024-ongoing", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=AY+Residence" },
-            { name: "AJ Residence", location: "Yogyakarta", status: "2024-ongoing", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=AJ+Residence" },
+    
+            { name: "AY Residence", location: "Yogyakarta", status: "2024-ongoing", categories: ["residential"], image: "images/AUR.jpg" },
+            { name: "AJ Residence", location: "Yogyakarta", status: "2024-ongoing", categories: ["residential"], image: "images/AJR.jpg" },
             { name: "First Kost 23-24", location: "Yogyakarta", status: "Completed, 2023-2024", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=First+Kost+23-24" },
             { name: "First Kost 25", location: "Yogyakarta", status: "Constructing, 2024-Ongoing", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=First+Kost+25" },
             { name: "First Kost 26-33", location: "Yogyakarta", status: "Constructing, 2024-Ongoing", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=First+Kost+26-33" },
-            { name: "First Kost UII", location: "Yogyakarta", status: "Constructing, 2024-Ongoing", categories: ["residential"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=First+Kost+UII" },
+            { name: "First Kost UII", location: "Yogyakarta", status: "Constructing, 2024-Ongoing", categories: ["residential"], image: "images/UII.jpg" },
 
-            // Interior Design Projects
-            { name: "JWCC Asih", location: "Jl Panglima Polim, Jakarta Selatan", status: "Design Incharge in andramatin studio", categories: ["interior"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=JWCC+Asih" },
-
-            // Public Building Projects
-            { name: "Taman Ismail Marzuki", location: "Jl Cikini Raya, Jakarta Pusat", status: "2019-2022", categories: ["public"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=Taman+Ismail+Marzuki" },
-            { name: "Roemah Koffie Indonesia", location: "Badung, Bali", status: "2023-ongoing", categories: ["public"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=Roemah+Koffie" },
-            { name: "Jetski Cafe", location: "Jakarta Utara", status: "2022-ongoing", categories: ["public"], image: "https://via.placeholder.com/400x250/BDBDBD/000000?text=Jetski+Cafe" },
         ];
 
         const carouselInner = document.getElementById('carouselInner');
